@@ -1,6 +1,7 @@
 import expres from 'express'
 import ServerFactory from "../factorys/server-factory.class";
 import { bean, log } from '../decorators/index'
+import { initRourer } from '../decorators/route.decorators';
 
 export default class ExpressServer extends ServerFactory{
 
@@ -18,7 +19,7 @@ export default class ExpressServer extends ServerFactory{
         this.middleware.forEach((middleware:any)=>{
             app.use(middleware)
         })
-
+        initRourer(app)
         app.listen(port, callback)
     }
 }
