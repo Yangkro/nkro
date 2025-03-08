@@ -40,3 +40,32 @@ export function log(message?:string, ...optionalParams:any){
         console.log(message, ...optionalParams)
     }
 }
+
+export function before(targetConstructor:any, targetMethodName:string){
+    const targetBean = BeanFactory.getBean(targetConstructor.name)
+    return function(target:any, propertyName:string, descriptor:PropertyDescriptor){
+        const currentMethod = targetBean[targetMethodName]
+        Object.assign(targetBean, {
+            [targetMethodName]:function(...args:any){
+                target[propertyName](...args)
+                // before
+                currentMethod.apply(targetBean, args)
+            }
+        })
+    }
+}
+
+export function after(targetConstructor:any, targetMethodName:string){
+    const targetBean = BeanFactory.getBean(targetConstructor.name)
+    return function(target:any, propertyName:string, descriptor:PropertyDescriptor){
+        const currentMethod = targetBean[targetMethodName]
+        Object.assign(targetBean,{
+            [targetMethodName]:function(...args:any){
+                const originResult  = currentMethod.apply(targetBean, args)
+                // after 可以接受原方法的返回值
+                const result = target[propertyName](originResult, {...args})
+                return result ?? originResult
+            }
+        })
+    }
+}

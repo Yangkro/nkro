@@ -1,3 +1,4 @@
+import BeanFactory from '../factorys/bean-factoray.class';
 import { IRouterMatcher } from 'express';
 const RouteMap: Record<string,Record<string,any>> = {
     get:<Record<string,Function>>{},
@@ -12,7 +13,14 @@ const RouteMap: Record<string,Record<string,any>> = {
 
 export function get(path:string){
     return function(target:any, propertyName:string,descriptor:PropertyDescriptor){
-        RouteMap.get[path] = target[propertyName]
+        // RouteMap.get[path] = target[propertyName]
+        let targetBean = BeanFactory.getBean(target.constructor.name)
+        if(targetBean === undefined){
+            BeanFactory.registerBean(target.constructor.name, target)
+            targetBean = target
+        }
+        RouteMap.get[path] = targetBean[propertyName]
+
     }
 }
 
