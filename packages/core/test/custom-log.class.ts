@@ -16,7 +16,7 @@ export default class CustomLog extends LogFactory {
     });
 
     @bean 
-    public createLog(){
+    public createLog():CustomLog{
         return new CustomLog()
     }
 

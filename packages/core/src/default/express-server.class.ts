@@ -5,7 +5,7 @@ import { bean, log } from '../decorators/index'
 export default class ExpressServer extends ServerFactory{
 
     @bean
-    public createServer(){
+    public createServer():ServerFactory{
         return new ExpressServer()
     }
 

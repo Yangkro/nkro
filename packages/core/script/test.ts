@@ -8,16 +8,18 @@ const testPath = path.resolve(basePath, "test");
 const srcFiles = walkSync(srcPath, { globs: ["**/*.ts"] });
 const testFiles = walkSync(testPath, { globs: ["**/*.ts"] });
 
-// console.log(2222, srcFiles, testFiles);
-(async function () {
-    try {
-        for(let p of srcFiles){
-            await import(`../src/${p}`)
+export default function(cb:()=>void){
+    (async function () {
+        try {
+            for(let p of srcFiles){
+                await import(`../src/${p}`)
+            }
+            for(let p of testFiles){
+                await import(`../test/${p}`)
+            }
+        } catch (err) {
+            console.error(err);
         }
-        for(let p of testFiles){
-            await import(`../test/${p}`)
-        }
-    } catch (err) {
-        console.error(err);
-    }
-})()
+        cb()
+    })()
+}

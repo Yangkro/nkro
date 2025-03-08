@@ -3,6 +3,7 @@ export default class BeanFactory {
 
     public static registerBean(beanName: string, bean: any) {
         this.beanMapper.set(beanName, bean)
+        console.log(11111, this.beanMapper)
     }
 
     

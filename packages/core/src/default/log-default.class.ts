@@ -3,7 +3,7 @@ import LogFactory from "../factorys/log-factorary.class";
  export default class LogDefault extends LogFactory {
 
     @bean
-    createLog(){
+    createLog():LogFactory {
         return new LogDefault()
     }
     public log(message:string, ...optionalParams:any){
